@@ -1,5 +1,6 @@
 import Promise from 'bluebird'
 import { Bacon } from 'sigh-core'
+import { toFileSystemState } from 'sigh-core/lib/stream'
 
 export default function(op, ...pipelines) {
   let bufferedCount = 0;
@@ -37,5 +38,5 @@ export default function(op, ...pipelines) {
         return Bacon.constant(events)
       }
     })
-  )
+  ).then(toFileSystemState)
 }
