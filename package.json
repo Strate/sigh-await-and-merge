@@ -27,7 +27,7 @@
     "sigh-core": "^0.11.8"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
+    "babel": ">=5 <6",
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
     "sigh": "^0.12.22",

@@ -1,7 +1,41 @@
-import _ from 'lodash'
 import Promise from 'bluebird'
 import { Bacon } from 'sigh-core'
 
-export default function(op, opts = {}) {
-  // TODO: plugin code goes here
+export default function(op, ...pipelines) {
+  let bufferedCount = 0;
+  let buffer = [];
+  let pushToBuffer;
+  const promise = new Promise(resolve => {
+    pushToBuffer = function push(events) {
+      bufferedCount++;
+      buffer = buffer.concat(events)
+      if (bufferedCount === pipelines.length) {
+        resolve(buffer)
+      }
+    }
+  })
+  // Promise.map(..., { concurrency: 1 }) delivers the items to the iterator
+  // out of order which messes with opTreeIndex ordering.
+  return Promise.reduce(
+    pipelines,
+    (streams, pipeline) => {
+      return op.compiler.compile(pipeline, op.stream || null)
+      .then(stream => {
+        streams.push(stream)
+        return streams
+      })
+    },
+    []
+  )
+  .then(streams =>
+    Bacon.mergeAll(streams.filter(stream => stream !== op.compiler.initStream)).flatMapLatest(events => {
+      let isInitialPhase = events.every(event => event.initPhase);
+      if (isInitialPhase) {
+        pushToBuffer(events)
+        return Bacon.fromPromise(promise)
+      } else {
+        return Bacon.constant(events)
+      }
+    })
+  )
 }
