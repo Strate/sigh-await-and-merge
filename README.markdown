@@ -1,9 +1,11 @@
 # sigh-await-and-merge
 
-Sigh plugin for await initial phase completion and merge streams
+Sigh plugin for await initial phase completion and merge streams.
+
 Works like merge builtin, but better.
 
 You can read more on https://github.com/sighjs/sigh/issues/32
+
 To get it work you can ask @ohjames to merge this PR: https://github.com/sighjs/sigh/pull/45
 
 ## Example
