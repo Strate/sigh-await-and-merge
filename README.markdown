@@ -6,8 +6,6 @@ Works like merge builtin, but better.
 
 You can read more on https://github.com/sighjs/sigh/issues/32
 
-To get it work you can ask @ohjames to merge this PR: https://github.com/sighjs/sigh/pull/45
-
 ## Example
 
 `npm install --save-dev sigh-await-and-merge` then add something like this to your `sigh.js`:
